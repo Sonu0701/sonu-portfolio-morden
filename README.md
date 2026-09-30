@@ -1,52 +1,142 @@
 # Sonu Kumar Portfolio — Modern Redesign
 
-This package contains two deployable projects:
+A modern AI Engineer portfolio featuring a React frontend and a Gemini-powered recruiter assistant.
 
-- `frontend/`: React + TypeScript + Vite + Tailwind portfolio
-- `backend/`: FastAPI + Mistral portfolio assistant
+## Tech Stack
 
-The redesign updates the visual system, project hierarchy, resume download,
-responsive behavior, accessibility, SEO metadata, chatbot experience, API
-validation, CORS policy, request timeout, rate limiting, and profile knowledge.
+- Frontend: React, TypeScript, Vite, Tailwind CSS
+- Backend: FastAPI, Python
+- AI: Google Gemini API (`google-genai`)
+- Deployment: Vercel for frontend and Render for backend
 
-## Run locally
+## Project Structure
+
+- `frontend/` — React + TypeScript + Vite + Tailwind portfolio
+- `backend/` — FastAPI portfolio assistant powered by Google Gemini
+
+## Run Locally
 
 ### Backend
 
-```bash
+Open a terminal in the project root:
+
+```powershell
 cd backend
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-cp .env.example .env
-# Add MISTRAL_API_KEY to .env
-uvicorn main:app --reload
+uv venv
+.\.venv\Scripts\Activate.ps1
+uv pip install -r requirements.txt
+Copy-Item .env.example .env
+```
+
+Open `backend/.env` and add:
+
+```env
+GEMINI_API_KEY=your_google_gemini_api_key
+GEMINI_MODEL=gemini-3.5-flash-lite
+ALLOWED_ORIGINS=http://localhost:5173
+RATE_LIMIT_PER_MINUTE=20
+ENVIRONMENT=development
+LOG_LEVEL=INFO
+```
+
+Start the backend:
+
+```powershell
+uv run uvicorn main:app --reload
+```
+
+The backend runs here:
+
+```text
+http://localhost:8000
+```
+
+Test it here:
+
+```text
+http://localhost:8000/health
 ```
 
 ### Frontend
 
-```bash
+Open a second terminal in the project root:
+
+```powershell
 cd frontend
 npm install
-cp .env.example .env
+Copy-Item .env.example .env
+```
+
+Set this in `frontend/.env`:
+
+```env
+VITE_API_URL=http://localhost:8000
+```
+
+Start the frontend:
+
+```powershell
 npm run dev
 ```
 
-The default frontend expects the backend at `http://localhost:8000`.
+Open the portfolio:
+
+```text
+http://localhost:5173
+```
 
 ## Deploy
 
-### Backend on Render
+### Backend: Render
 
-1. Push `backend/` to the backend repository.
-2. Set `MISTRAL_API_KEY` as a secret environment variable.
-3. Set `ALLOWED_ORIGINS` to the exact deployed frontend origin.
-4. Deploy using `render.yaml` or the included build/start commands.
+1. Create a Render Web Service connected to this GitHub repository.
+2. Set **Root Directory** to:
 
-### Frontend on Vercel
+   ```text
+   backend
+   ```
 
-1. Push `frontend/` to the frontend repository.
-2. Set `VITE_API_URL` to the deployed backend URL.
-3. Build with `npm run build`; output directory is `dist`.
+3. Add these Render environment variables:
 
-Never commit `.env` files or API keys.
+   ```env
+   GEMINI_API_KEY=your_google_gemini_api_key
+   GEMINI_MODEL=gemini-3.5-flash-lite
+   ALLOWED_ORIGINS=https://your-frontend.vercel.app
+   RATE_LIMIT_PER_MINUTE=20
+   ENVIRONMENT=production
+   LOG_LEVEL=INFO
+   ```
+
+4. Deploy the backend and copy its Render URL.
+
+### Frontend: Vercel
+
+1. Import this GitHub repository into Vercel.
+2. Set **Root Directory** to:
+
+   ```text
+   frontend
+   ```
+
+3. Add this Vercel environment variable:
+
+   ```env
+   VITE_API_URL=https://your-render-backend-url.onrender.com
+   ```
+
+4. Deploy the frontend.
+5. Copy your Vercel URL.
+6. In Render, update the backend variable:
+
+   ```env
+   ALLOWED_ORIGINS=https://your-new-frontend.vercel.app
+   ```
+
+7. Redeploy the Render backend.
+
+## Security
+
+- Never commit `.env` files.
+- Never upload your Gemini API key to GitHub.
+- Store `GEMINI_API_KEY` only in your local `backend/.env` and Render environment variables.
+- Keep `.env.example` files as templates only.
