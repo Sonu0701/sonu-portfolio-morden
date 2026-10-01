@@ -140,3 +140,6 @@ http://localhost:5173
 - Never upload your Gemini API key to GitHub.
 - Store `GEMINI_API_KEY` only in your local `backend/.env` and Render environment variables.
 - Keep `.env.example` files as templates only.
+
+
+Testing Vercel deployment
